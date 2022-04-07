@@ -1158,7 +1158,12 @@ static enum AVPixelFormat videotoolbox_best_pixel_format(AVCodecContext *avctx) 
 #endif
 #if HAVE_KCVPIXELFORMATTYPE_420YPCBCR10BIPLANARVIDEORANGE
     if (depth > 8) {
-        return AV_PIX_FMT_P010;
+        #if TARGET_OS_IPHONE
+            /* iOS doesn't support 10 bit textures in GLES */
+            return AV_PIX_FMT_BGRA;
+        #else
+            return AV_PIX_FMT_P010;
+        #endif
     }
 #endif
 
